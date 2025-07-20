@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tres en Raya</title>
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .tablero {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+        }
+
+        .celda {
+            width: 100px;
+            height: 100px;
+            background-color: #333;
+            border: 2px solid #fff;
+            font-size: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .celda:hover {
+            background-color: #444;
+        }
+
+        .ganador {
+            background-color: #0f0 !important;
+        }
+
+        #mensajeGanador {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #0f0;
+        }
+
+        #timer {
+            font-size: 18px;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tres en raya</h1>
+    <button onclick="reiniciarJuego()">Reset del juego</button>
+    <div class="tablero" id="tablero"></div>
+    <div id="mensajeGanador"></div>
+    <div id="timer"></div>
+
+    <script>
+        const tablero = document.getElementById('tablero');
+        const mensajeGanador = document.getElementById('mensajeGanador');
+        const timerDisplay = document.getElementById('timer');
+        let turno = 'X';
+        let celdas = [];
+        let timer;
+        let tiempoRestante;
+
+        function crearTablero() {
+            tablero.innerHTML = '';
+            mensajeGanador.textContent = '';
+            celdas = [];
+            for (let i = 0; i < 9; i++) {
+                const celda = document.createElement('div');
+                celda.classList.add('celda');
+                celda.addEventListener('click', () => jugar(i));
+                tablero.appendChild(celda);
+                celdas.push(celda);
+            }
+            iniciarTemporizador();
+        }
+
+        function jugar(index) {
+            if (celdas[index].textContent || verificarGanador()) return;
+            celdas[index].textContent = turno;
+            const ganador = verificarGanador();
+            if (ganador) {
+                mostrarGanador(ganador);
+            } else {
+                turno = turno === 'X' ? 'O' : 'X';
+                iniciarTemporizador();
+            }
+        }
+
+        function verificarGanador() {
+            const combinaciones = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+            for (const [a, b, c] of combinaciones) {
+                if (celdas[a].textContent &&
+                    celdas[a].textContent === celdas[b].textContent &&
+                    celdas[a].textContent === celdas[c].textContent) {
+                    return [a, b, c];
+                }
+            }
+            return null;
+        }
+
+        function mostrarGanador(indices) {
+            clearInterval(timer);
+            indices.forEach(i => celdas[i].classList.add('ganador'));
+            const ganador = celdas[indices[0]].textContent;
+            const nombreGanador = ganador === 'O' ? 'Cero' : 'equis';
+            mensajeGanador.textContent = `¡Jugador ${nombreGanador} ha ganado!`;
+            hablar(`Jugador ${nombreGanador} ha ganado`);
+        }
+
+        function hablar(texto) {
+            const msg = new SpeechSynthesisUtterance(texto);
+            msg.lang = 'es-ES';
+            window.speechSynthesis.speak(msg);
+        }
+
+        function iniciarTemporizador() {
+            clearInterval(timer);
+            tiempoRestante = 15;
+            timerDisplay.textContent = `Tiempo restante para ${turno}: ${tiempoRestante} segundos`;
+            timer = setInterval(() => {
+                tiempoRestante--;
+                timerDisplay.textContent = `Tiempo restante para ${turno}: ${tiempoRestante} segundos`;
+                if (tiempoRestante <= 0) {
+                    clearInterval(timer);
+                    mensajeGanador.textContent = `¡Tiempo agotado! Jugador ${turno} perdió su turno.`;
+                    hablar(`Tiempo agotado. Jugador ${turno} perdió su turno.`);
+                    turno = turno === 'X' ? 'O' : 'X';
+                    iniciarTemporizador();
+                }
+            }, 1000);
+        }
+
+        function reiniciarJuego() {
+            turno = 'X';
+            crearTablero();
+        }
+
+        crearTablero();
+    </script>
+</body>
+</html>
+
+

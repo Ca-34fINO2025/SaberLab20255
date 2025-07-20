@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego de Memoria - Dragon Ball</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0d0d0d 0%, #1a237e 50%, #000000 100%);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .titulo span {
+      font-family: 'Bangers', cursive;
+      font-size: 3em;
+      background: linear-gradient(to right, orange, yellow);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 2px 2px 4px #000;
+      letter-spacing: 2px;
+    }
+
+    .info {
+      margin: 8px 0;
+      font-size: 1.2em;
+      color: #ffca28;
+      text-shadow: 1px 1px 2px black;
+    }
+
+    .tablero {
+      display: grid;
+      grid-template-columns: repeat(4, 80px);
+      grid-gap: 12px;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .card {
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle at top left, #ff5722, #bf360c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+      box-shadow: 0 4px 12px rgba(255,165,0,0.5);
+      color: white;
+    }
+
+    .card.revealed {
+      background-color: white;
+      color: black;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      background-color: #fbc02d;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(255,193,7,0.8);
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ffeb3b;
+    }
+
+    .mensaje-final {
+      position: absolute;
+      bottom: 20px;
+      background: linear-gradient(to right, #f57c00, #fbc02d);
+      padding: 15px 25px;
+      border-radius: 12px;
+      color: black;
+      font-size: 1.3em;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.7);
+      display: none;
+      animation: aparecer 1s ease-out;
+      font-family: 'Bangers', cursive;
+      text-align: center;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="titulo"><span>Juego de Memoria Dragon Ball</span></h1>
+  <div class="info">Movimientos: <span id="movimientos">0</span></div>
+  <div class="info">Tiempo: <span id="tiempo">0 segundos</span></div>
+  <div class="tablero" id="tablero"></div>
+  <button onclick="iniciarJuego()">Nuevo juego</button>
+  <div class="mensaje-final" id="mensajeFinal"></div>
+
+  <script>
+    const personajes = [
+      '🟠', // Goku
+      '🔵', // Vegeta
+      '🟡', // Gohan
+      '🟢', // Piccolo
+      '⚪', // Krillin
+      '🟣', // Trunks
+      '🔴', // Freezer
+      '⚫'  // Cell
+    ];
+
+    let tablero = document.getElementById('tablero');
+    let movimientos = 0;
+    let tiempo = 0;
+    let intervalo;
+    let primera = null;
+    let bloqueadas = false;
+    let aciertos = 0;
+
+    function iniciarJuego() {
+      const duplicados = [...personajes, ...personajes];
+      const mezclados = duplicados.sort(() => 0.5 - Math.random());
+
+      tablero.innerHTML = '';
+      document.getElementById('mensajeFinal').style.display = 'none';
+
+      movimientos = 0;
+      tiempo = 0;
+      aciertos = 0;
+      primera = null;
+      bloqueadas = false;
+      clearInterval(intervalo);
+      document.getElementById('movimientos').textContent = movimientos;
+      document.getElementById('tiempo').textContent = '0 segundos';
+
+      intervalo = setInterval(() => {
+        tiempo++;
+        document.getElementById('tiempo').textContent = `${tiempo} segundos`;
+      }, 1000);
+
+      mezclados.forEach((icono, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.valor = icono;
+        card.addEventListener('click', () => revelarCarta(card));
+        tablero.appendChild(card);
+      });
+    }
+
+    function revelarCarta(card) {
+      if (bloqueadas || card.classList.contains('revealed')) return;
+
+      card.textContent = card.dataset.valor;
+      card.classList.add('revealed');
+
+      if (!primera) {
+        primera = card;
+      } else {
+        movimientos++;
+        document.getElementById('movimientos').textContent = movimientos;
+
+        if (card.dataset.valor === primera.dataset.valor) {
+          aciertos++;
+          primera = null;
+
+          if (aciertos === personajes.length) {
+            clearInterval(intervalo);
+            mostrarFelicitacion();
+          }
+        } else {
+          bloqueadas = true;
+          setTimeout(() => {
+            card.textContent = '';
+            primera.textContent = '';
+            card.classList.remove('revealed');
+            primera.classList.remove('revealed');
+            primera = null;
+            bloqueadas = false;
+          }, 800);
+        }
+      }
+    }
+
+    function mostrarFelicitacion() {
+      let puntaje = 100 - (movimientos - personajes.length);
+      if (puntaje < 0) puntaje = 0;
+
+      const mensaje = document.getElementById('mensajeFinal');
+      mensaje.innerHTML = `💥 ¡Felicidades, guerrero Gokú!<br>Completaste el juego en <strong>${movimientos}</strong> movimientos y <strong>${tiempo}</strong> segundos.<br>⭐ Puntuación: <strong>${puntaje}/100</strong>`;
+      mensaje.style.display = 'block';
+    }
+
+    iniciarJuego();
+  </script>
+</body>
+</html>
+

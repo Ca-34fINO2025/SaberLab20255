@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SaberLab - Juegos Web</title>
+  <link rel="shortcut icon" href="./public/logo.webp" type="image/webp" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f8fa;
+      color: #333;
+    }
+    header {
+      background-color: #00bcd4; /* aqua */
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo {
+      height: 50px;
+      width: auto;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .game {
+      background: #e6f0ff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+    .game img {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    .game h2 {
+      font-size: 1.2rem;
+      margin: 0 0 0.5rem;
+      color: #004a99;
+    }
+    .game p.description {
+      font-size: 0.9rem;
+      margin: 0 0 0.3rem;
+      color: #003366;
+    }
+    .play-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #00bcd4; /* aqua */
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      margin-top: 0.5rem;
+    }
+    .play-button:hover {
+      background-color: #0097a7; /* aqua oscuro */
+    }
+    footer {
+      background-color: #00bcd4; /* aqua */
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      position: relative;
+      z-index: 2;
+      
+    }
+    .logo {
+  width: 150px; /* Cambia según el tamaño que quieras */
+  height: auto; /* Mantiene la proporción de la imagen */
+  max-width: 150px;
+  min-width: 50px;
+}
+    .footer-extra {
+      background-color: #00e5ff; /* aqua más claro debajo del footer */
+      height: 30px;
+      width: 100%;
+      margin-top: -8px;
+      position: relative;
+      z-index: 1;
+    }
+    footer h4, footer h5 {
+      margin: 0.2rem 0;
+    }
+    @media (max-width: 500px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <img src="Logo.1.JPG" alt="Logo SaberLab" class="logo"/>
+      <div>
+        <h1>Catálogo de Juegos Web</h1>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="game-container">
+
+      <div class="game">
+        <img src="tres en raya.JPG" alt="Juego tres en raya" />
+        <h2>Juego de Tres en Raya</h2>
+        <p class="description">
+          Diviértete entrenando tu lógica y estrategia con este clásico juego. Ideal para fortalecer habilidades de pensamiento crítico y concentración.
+        </p>
+        <p class="description"><strong>Extras:</strong> Modo para un jugador o dos jugadores, niveles progresivos.</p>
+        <p class="description"><strong>Ideal para:</strong> Niños y jóvenes desde primaria hasta secundaria.</p>
+        <a href="tres en raya.html" target="_blank" class="play-button">Ir al juego</a>
+      </div>
+
+      <div class="game">
+        <img src="memoria.JPG" alt="Juego de memoria" />
+        <h2>Juego de Memoria</h2>
+        <p class="description">
+          Mejora tu concentración y memoria visual con este juego que reta a encontrar parejas de cartas iguales en el menor tiempo posible.
+        </p>
+        <p class="description"><strong>Extras:</strong> Diferentes niveles de dificultad y temporizador.</p>
+        <p class="description"><strong>Ideal para:</strong> Niños en edad escolar que quieren reforzar habilidades cognitivas.</p>
+        <a href="Juego de memoria.html" target="_blank" class="play-button">Ir al juego</a>
+      </div>
+
+      <div class="game">
+        <img src="quiz.JPG" alt="Juego de Quiz" />
+        <h2>Juego de Quiz</h2>
+        <p class="description">
+          Mini juegos y quizzes interactivos por asignatura (matemáticas, lenguaje, ciencias, sociales eh ingles) para reforzar el aprendizaje.
+        </p>
+        <p class="description"><strong>Extras:</strong> Niveles, puntos, retroalimentación inmediata.</p>
+        <p class="description"><strong>Ideal para:</strong> Primaria y primer ciclo de secundaria.</p>
+        <a href="Quiz escolar.html" target="_blank" class="play-button">Ir al juego</a>
+      </div>
+
+      <div class="game">
+        <img src="color game.JPG" alt="Juego de Colores" />
+        <h2>Juego de Colores en Inglés</h2>
+        <p class="description">
+          Juego para identificar colores escuchando su nombre en inglés y seleccionándolos correctamente.
+        </p>
+        <p class="description"><strong>Extras:</strong> Voz en inglés para mejorar pronunciación y reconocimiento auditivo.</p>
+        <p class="description"><strong>Ideal para:</strong> Niños en aprendizaje inicial del inglés.</p>
+        <a href="ingles.html" target="_blank" class="play-button">Ir al juego</a>
+      </div>
+
+      
+      <div class="game">
+        <img src="Jaboco1.JPG" alt="Juego de Colores" />
+        <h2>Juego de Geometria</h2>
+        <p class="description">
+          Juego de Geometria ideal para niños de primaria y secundaria.
+        </p>
+        <p class="description"><strong>Extras:</strong> Movimientos y dificultades para el razomanamiento logíco y reconocimiento geometrico.</p>
+        <p class="description"><strong>Ideal para:</strong> Niños en aprendizaje inicial de Geometria.</p>
+        <a href="https://arcade.makecode.com/15159-48215-07042-49581" target="_blank" class="play-button">Ir al juego</a>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <h4>Realizado por: ING. Alexis Valladares y alumno Alexander Sanchez－ <span>SaberLab 2025</span></h4>
+    <h5>Donde el conocimiento cobra vida</h5>
+  </footer>
+  <div class="footer-extra"></div>
+</body>
+</html>

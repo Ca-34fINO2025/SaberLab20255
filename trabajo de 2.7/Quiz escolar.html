@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Escolar</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+    .question {
+      background: #ffffff22;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 15px 0;
+      width: 100%;
+      max-width: 600px;
+    }
+    .question h2 {
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff9800;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      color: white;
+    }
+    #result {
+      margin-top: 30px;
+      font-size: 1.5em;
+      background: #4caf50;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz Escolar</h1>
+
+  <form id="quizForm"></form>
+
+  <div id="result"></div>
+  <button onclick="generarQuiz()">Nuevo Juego</button>
+
+  <script>
+    const preguntasPorMateria = {
+      matematicas: [
+        { pregunta: "¿Cuánto es 7 × 6?", opciones: ["42", "36", "48", "40"], correcta: "42" },
+        { pregunta: "¿Cuánto es 8 + 5?", opciones: ["12", "14", "13", "15"], correcta: "13" },
+        { pregunta: "¿Cuánto es 9 - 3?", opciones: ["5", "6", "7", "4"], correcta: "6" },
+        { pregunta: "¿Cuánto es 5 × 4?", opciones: ["20", "25", "15", "10"], correcta: "20" },
+        { pregunta: "¿Cuánto es 12 ÷ 4?", opciones: ["2", "3", "4", "6"], correcta: "3" },
+      ],
+      lenguaje: [
+        { pregunta: "¿Cuál es un sustantivo?", opciones: ["mesa", "rápidamente", "azul", "grande"], correcta: "mesa" },
+        { pregunta: "¿Cuál es un verbo?", opciones: ["correr", "libro", "verde", "alto"], correcta: "correr" },
+        { pregunta: "¿Qué es un adjetivo?", opciones: ["rojo", "cantar", "ratón", "rápido"], correcta: "rojo" },
+        { pregunta: "¿Cuál es un pronombre?", opciones: ["yo", "casa", "rápido", "cantar"], correcta: "yo" },
+        { pregunta: "¿Cuál es una preposición?", opciones: ["sobre", "perro", "grande", "comer"], correcta: "sobre" },
+      ],
+      ciencias: [
+        { pregunta: "¿Cuál es el planeta más cercano al sol?", opciones: ["Mercurio", "Venus", "Tierra", "Marte"], correcta: "Mercurio" },
+        { pregunta: "¿Cuántas patas tiene una araña?", opciones: ["8", "6", "4", "10"], correcta: "8" },
+        { pregunta: "¿Qué necesitan las plantas para vivir?", opciones: ["luz", "piedras", "arena", "plástico"], correcta: "luz" },
+        { pregunta: "¿Qué órgano bombea sangre?", opciones: ["corazón", "pulmón", "hígado", "estómago"], correcta: "corazón" },
+        { pregunta: "¿Qué gas respiramos?", opciones: ["oxígeno", "dióxido", "hidrógeno", "helio"], correcta: "oxígeno" },
+      ],
+      sociales: [
+        { pregunta: "¿En qué año se independizó El Salvador?", opciones: ["1821", "1880", "1900", "1850"], correcta: "1821" },
+        { pregunta: "¿Qué continente está El Salvador?", opciones: ["América", "Asia", "Europa", "África"], correcta: "América" },
+        { pregunta: "¿Cuál es la capital de El Salvador?", opciones: ["San Salvador", "Santa Ana", "La Unión", "San Miguel"], correcta: "San Salvador" },
+        { pregunta: "¿Qué es una comunidad?", opciones: ["grupo de personas", "edificio", "calle", "animal"], correcta: "grupo de personas" },
+        { pregunta: "¿Qué colores tiene la bandera de El Salvador?", opciones: ["azul, blanco y azul", "rojo y blanco", "verde y blanco", "amarillo y rojo"], correcta: "azul, blanco y azul" },
+      ],
+      ingles: [
+        { pregunta: "¿Cuál es la traducción de 'apple'?", opciones: ["manzana", "plátano", "uva", "pera"], correcta: "manzana" },
+        { pregunta: "¿Qué significa 'dog'?", opciones: ["perro", "gato", "pez", "conejo"], correcta: "perro" },
+        { pregunta: "¿Cómo se dice 'hola' en inglés?", opciones: ["hello", "bye", "thanks", "dog"], correcta: "hello" },
+        { pregunta: "¿Qué color es 'blue'?", opciones: ["azul", "rojo", "verde", "amarillo"], correcta: "azul" },
+        { pregunta: "¿Qué es 'book'?", opciones: ["libro", "mesa", "lápiz", "casa"], correcta: "libro" },
+      ]
+    };
+
+    function generarQuiz() {
+      const form = document.getElementById("quizForm");
+      form.innerHTML = "";
+      const result = document.getElementById("result");
+      result.style.display = "none";
+      result.textContent = "";
+
+      const preguntas = [];
+      for (let materia in preguntasPorMateria) {
+        const grupo = preguntasPorMateria[materia];
+        const seleccionadas = grupo.sort(() => 0.5 - Math.random()).slice(0, 1); // 1 por materia
+        preguntas.push(...seleccionadas);
+      }
+
+      preguntas.forEach((p, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+          <h2>${p.pregunta}</h2>
+          <div class="options">
+            ${p.opciones.map(op => `<label><input type="radio" name="q${i}" value="${op}"> ${op}</label>`).join("")}
+          </div>
+        `;
+        form.appendChild(div);
+      });
+
+      const btn = document.createElement("button");
+      btn.type = "submit";
+      btn.textContent = "Enviar respuestas";
+      form.appendChild(btn);
+
+      form.onsubmit = function(e) {
+        e.preventDefault();
+        let puntuacion = 0;
+        preguntas.forEach((p, i) => {
+          const seleccionada = document.querySelector(`input[name="q${i}"]:checked`);
+          if (seleccionada && seleccionada.value === p.correcta) {
+            puntuacion++;
+          }
+        });
+        result.style.display = "block";
+        result.textContent = `🎉 Obtuviste ${puntuacion} de ${preguntas.length} respuestas correctas.`;
+      };
+    }
+
+    generarQuiz();
+  </script>
+</body>
+</html>
